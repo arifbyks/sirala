@@ -63,12 +63,14 @@ const express = require('express');
 const path = require('path');
 const app = express();
 
-// ... mevcut API route'ların ve Socket.io ayarların burada kalsın ...
+const path = require('path'); // Eğer en üstte tanımlamadıysan bu kalsın
+
+// ... diğer API ve Socket.io kodların ...
 
 // React statik dosyalarını dışarıya açıyoruz
 app.use(express.static(path.join(__dirname, 'dist')));
 
-// API dışındaki tüm istekleri (kullanıcı siteye girdiğinde) React'a yönlendiriyoruz
+// API dışındaki tüm istekleri React'a yönlendiriyoruz
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
