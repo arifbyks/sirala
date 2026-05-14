@@ -2,6 +2,7 @@ const express = require('express');
 const http = require('http');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const path = require('path'); // React dosyalarını bulmak için eklendi
 const connectDB = require('./config/db');
 const { initSocket } = require('./socket');
 
@@ -40,10 +41,22 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// 404 handler
-app.use((req, res) => {
-  res.status(404).json({ message: 'Endpoint bulunamadı' });
+// Sadece API isteklerinde bulunamayan yollar için 404 ver
+app.use('/api/*', (req, res) => {
+  res.status(404).json({ message: 'API Endpoint bulunamadı' });
 });
+
+// ==========================================
+// FRONTEND (REACT) BAĞLANTI KISMI
+// ==========================================
+// dist klasörünü dışarıya açıyoruz
+app.use(express.static(path.join(__dirname, 'dist')));
+
+// API harici gelen tüm istekleri (site ziyaretçilerini) React'a yönlendiriyoruz
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
+// ==========================================
 
 // Error handler
 app.use((err, req, res, next) => {
