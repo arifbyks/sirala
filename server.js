@@ -57,20 +57,3 @@ server.listen(PORT, () => {
   console.log(`📡 Socket.io hazır`);
   console.log(`🌐 Client URL: ${process.env.CLIENT_URL || 'http://localhost:5173'}`);
 });
-
-
-const express = require('express');
-const path = require('path');
-const app = express();
-
-const path = require('path'); // Eğer en üstte tanımlamadıysan bu kalsın
-
-// ... diğer API ve Socket.io kodların ...
-
-// React statik dosyalarını dışarıya açıyoruz
-app.use(express.static(path.join(__dirname, 'dist')));
-
-// API dışındaki tüm istekleri React'a yönlendiriyoruz
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-});
